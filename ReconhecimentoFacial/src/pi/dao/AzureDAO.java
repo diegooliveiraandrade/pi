@@ -13,26 +13,22 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import pi.entity.Cliente;
-
-public class AzureDAO	{
+public class AzureDAO {
 
 	// key da API
 	private static final String subscriptionKey = "ecf414eaa0434da2b46426317f6b999d";
-	
 
-	/**
-	 * IDENTIFICANDO A PESSOA ATRAVES DO ID RECEBIDO PELO IdentifyCLiente
-	 */
 	public String identifyCliente(String idPhoto) {
-		Cliente cliente = new Cliente();
-		String retorno = null;
+
+		String personId = "";
 		String endPoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/identify";
+
 		HttpClient httpclient = new DefaultHttpClient();
 
 		try {
@@ -44,31 +40,35 @@ public class AzureDAO	{
 			request.setHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
 
 			// Request body
-			StringEntity reqEntity = new StringEntity("{\n" + "    \"personGroupId\": \"grupao\",\n"
-					+ "    \"faceIds\": [\n" + "        \"" + idPhoto + "\"\n" + "    ],\n"
-					+ "    \"maxNumOfCandidatesReturned\": 1,\n" + "    \"confidenceThreshold\": 0.5\n" + "}");
+			StringEntity reqEntity = new StringEntity(
+					"{\n" + "    \"personGroupId\": \"grupao\",\n" + "    \"faceIds\": [\n" + "        \"" + idPhoto
+							+ "\"\n" + "    ],\n" + "    \"maxNumOfCandidatesReturned\": 1,\n" + "}");
+
 			request.setEntity(reqEntity);
 			HttpResponse response = httpclient.execute(request);
-			String jsonResult = EntityUtils.toString(response.getEntity());
-			jsonResult.replaceAll("/", "");
-			
-			
-				
-			System.out.println("Identifica Cliente... cliente com estas caracteristicas:" + "\n" + jsonResult);
-			
-			
+
+			String json = EntityUtils.toString(response.getEntity());
+
+			System.out.println("Retorno Azure Identify: " + json);
+
+			if (response != null) {
+				String jsonString = json;
+				JSONArray jsonArray = new JSONArray(jsonString);
+				JSONArray candidates = jsonArray.getJSONObject(0).getJSONArray("candidates");
+				for (int i = 0; i < candidates.length(); i++) {
+					personId = candidates.getJSONObject(i).getString("personId");
+				}
+			}
+
+			System.out.println(personId);
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-		return retorno;
-
+		return personId;
 	}
 
-	/*
-	 * TREINANDO A API
-	 */
 	public void training() {
 		String endPoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/persongroups/grupao/train";
 		HttpClient httpclient = new DefaultHttpClient();
@@ -96,9 +96,6 @@ public class AzureDAO	{
 		}
 	}
 
-	/*
-	 * DETECTANDO ATRAVES DE UMA URL
-	 */
 	public String detectClienteToUrl(String linkToFoto) {
 		String retorno = null;
 		String endPointDetect = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/detect";
@@ -146,9 +143,6 @@ public class AzureDAO	{
 		return retorno;
 	}
 
-	/*
-	 * INSERÇÃO DE UMA FOTO SALVA
-	 */
 	public void insertPhotoClienteLocal(String personId, String user, String photoUrl) {
 		String endPoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/persongroups/grupao/persons/"
 				+ personId + "/persistedFaces";
@@ -173,7 +167,7 @@ public class AzureDAO	{
 
 			if (entity != null) {
 				System.out.println(EntityUtils.toString(entity));
-				System.out.println("Foto :" + photoUrl + " do cliente inserida no Azure!");
+				System.out.println("Foto: " + photoUrl + " do cliente inserida no Azure!");
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -181,9 +175,6 @@ public class AzureDAO	{
 
 	}
 
-	/*
-	 * INSERÇÃO DA FOTO ATRAVES DE UM ARQUIVO .PNG
-	 */
 	public void insertPhotoClienteFile(String personId, String user, File file) {
 		String endPoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/persongroups/grupao/persons/"
 				+ personId + "/persistedFaces";
@@ -214,9 +205,6 @@ public class AzureDAO	{
 
 	}
 
-	/**
-	 * DETECTANDO O CLIENTE ATRAVES DE UMA STRING
-	 */
 	public String detectCliente(String urlPhoto) {
 		String endPointDetect = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/detect";
 		String idPhoto = "";
@@ -263,10 +251,6 @@ public class AzureDAO	{
 
 		return idPhoto;
 	}
-
-	/*
-	 * DETECTANDO ATRAVES DE UM ARQUIVO (file)
-	 */
 
 	public String detectClienteFile(File file) {
 		String endPointDetect = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/detect";
@@ -315,9 +299,6 @@ public class AzureDAO	{
 		return idPhoto;
 	}
 
-	/*
-	 * INSERINDO UMA PESSOA EM UM GRUPO DO AZURE
-	 */
 	public String insertCliente(String nome, String user) {
 		String endPoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/persongroups/grupao/persons";
 		String personId = "";
@@ -342,7 +323,6 @@ public class AzureDAO	{
 			HttpResponse response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
 			String json = EntityUtils.toString(response.getEntity());
-			System.out.println(json);
 
 			// response
 			if (entity != null) {
@@ -350,8 +330,6 @@ public class AzureDAO	{
 				if (node.has("personId")) {
 					personId = node.get("personId").toString();
 					personId = personId.replaceAll("\"", "");
-					
-					
 				}
 			}
 

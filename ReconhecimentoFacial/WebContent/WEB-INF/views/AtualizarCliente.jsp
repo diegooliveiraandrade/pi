@@ -10,7 +10,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Atualizar Cliente</title>
-
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 </head>
@@ -32,9 +31,8 @@
 				<div class="row">
 					<div class="form-group col-md-8">
 						<label for="nome">Nome</label> <input type="text"
-							class="form-control" name="nome" id="nome"
-							maxlength="300" placeholder="Nome"
-							value="${cliente.nome }">
+							class="form-control" name="nome" id="nome" maxlength="300"
+							placeholder="Nome" value="${cliente.nome }">
 					</div>
 				</div>
 				<div class="row">
@@ -95,15 +93,18 @@
 					</div>
 
 				</div>
-				<hr />
-				<div id="actions" class="row">
-					<div class="col-md-12">
-						<button type="submit" class="btn btn-primary" name="acao"
-							value="criar">Salvar</button>
-						<a href="index" class="btn btn-default">Cancelar</a>
-					</div>
+			</div>
+			<hr />
+			<div id="actions" class="row">
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary" name="acao"
+						value="criar">Salvar</button>
+					<a href="index" class="btn btn-default">Cancelar</a>
 				</div>
+			</div>
 		</form>
+
+		<c:import url="Footer.jsp" />
 	</div>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
