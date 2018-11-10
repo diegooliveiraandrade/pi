@@ -46,7 +46,8 @@
 					</div>
 					<div class="col-md-10 mb-3">
 						<label>Nome Completo</label> <input type="text"
-							value="${cliente.nome}" class="form-control" name="nome" id="nome" maxlength="100" readonly>
+							value="${cliente.nome}" class="form-control" name="nome"
+							id="nome" maxlength="100" readonly>
 					</div>
 				</div>
 
@@ -95,7 +96,8 @@
 
 					<div class="col-md-2 mb-3">
 						<label for="address">Número</label> <input type="text"
-							value="${cliente.numero}" class="form-control" name="numero" id="numero" maxlength="10" readonly>
+							value="${cliente.numero}" class="form-control" name="numero"
+							id="numero" maxlength="10" readonly>
 					</div>
 				</div>
 
@@ -107,7 +109,8 @@
 					</div>
 					<div class="col-md-5 mb-3">
 						<label for="country">Bairro</label> <input type="text"
-							value="${cliente.bairro}" class="form-control" name="bairro" id="bairro" maxlength="100" readonly>
+							value="${cliente.bairro}" class="form-control" name="bairro"
+							id="bairro" maxlength="100" readonly>
 					</div>
 
 					<div class="col-md-4 mb-3">
@@ -120,16 +123,25 @@
 				<div class="row">
 					<div class="col-md-4 mb-3">
 						<label for="country">Cidade</label> <input type="text"
-							value="${cliente.cidade}" class="form-control" name="cidade" id="cidade" maxlength="100" readonly>
+							value="${cliente.cidade}" class="form-control" name="cidade"
+							id="cidade" maxlength="100" readonly>
 					</div>
 					<div class="col-md-4 mb-3">
-						<label for="country">UF</label> <input type="text"
-							value="N/A" class="form-control" name="estado" id="estado" maxlength="2" readonly>
+						<label for="country">UF</label> <input type="text" value="N/A"
+							class="form-control" name="estado" id="estado" maxlength="2"
+							readonly>
 					</div>
 					<div class="col-md-4 mb-3">
 						<label for="country">País</label> <input type="text"
 							class="form-control" name="pais" id="pais"
 							value="${cliente.pais}" maxlength="100" readonly>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 mb-3">
+						<label for="country">Identificação Azure</label> <input
+							type="text" class="form-control" name="pais" id="pais"
+							value="${cliente.personId}" maxlength="100" readonly>
 					</div>
 				</div>
 				<div class="row">
