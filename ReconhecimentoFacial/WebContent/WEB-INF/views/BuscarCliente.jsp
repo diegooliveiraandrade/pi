@@ -17,7 +17,6 @@
 	crossorigin="anonymous">
 
 <link rel="icon" href="https://getbootstrap.com/favicon.ico">
-
 <title>Busca de Cliente</title>
 </head>
 <body class="bg-light">
