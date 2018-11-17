@@ -19,7 +19,13 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import pi.entity.Cliente;
+import pi.service.ClienteService;
+
 public class AzureDAO {
+
+	private ClienteService clienteService;
+	private Cliente cliente;
 
 	// key da API
 	private static final String subscriptionKey = "ecf414eaa0434da2b46426317f6b999d";
@@ -57,16 +63,19 @@ public class AzureDAO {
 				JSONArray candidates = jsonArray.getJSONObject(0).getJSONArray("candidates");
 				for (int i = 0; i < candidates.length(); i++) {
 					personId = candidates.getJSONObject(i).getString("personId");
-				}
-			}
+					String chave = personId;
+					clienteService.listClienteToChave(chave);
 
-			System.out.println(personId);
+				}
+
+			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		return personId;
+
 	}
 
 	public void training() {
@@ -160,6 +169,7 @@ public class AzureDAO {
 			// Request body
 			File file = new File(photoUrl);
 			FileEntity reqEntity = new FileEntity(file, ContentType.APPLICATION_OCTET_STREAM);
+
 			request.setEntity(reqEntity);
 			HttpResponse response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
@@ -197,7 +207,7 @@ public class AzureDAO {
 			System.out.println(response.getStatusLine());
 			if (entity != null) {
 				System.out.println(EntityUtils.toString(entity));
-				System.out.println("Foto :" + file.getName() + " do cliente inserida no Azure!");
+				System.out.println("Foto:" + file.getName() + " do cliente inserida no Azure!");
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

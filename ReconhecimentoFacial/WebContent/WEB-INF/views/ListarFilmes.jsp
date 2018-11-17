@@ -4,11 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Buscar Clientes</title>
+<title>Buscar Filmes</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
@@ -26,12 +27,11 @@
 						aria-label="Fechar">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="modalLabel">Excluir Cliente</h4>
+					<h4 class="modal-title" id="modalLabel">Excluir Filme</h4>
 				</div>
-				<div class="modal-body">Deseja realmente excluir este cliente?
-				</div>
+				<div class="modal-body">Deseja realmente excluir este filme?</div>
 				<div class="modal-footer">
-					<form action="excluir_cliente" method="post">
+					<form action="excluir_filme" method="post">
 						<input type="hidden" name="id" id="id_excluir" />
 						<button type="submit" class="btn btn-primary" name="acao"
 							value="Excluir">Sim</button>
@@ -52,15 +52,22 @@
 					<h2>Clientes</h2>
 				</div>
 
-				
-				<div class="col-md-2">
-					<a href="busca_foto" class="btn btn-primary pull-right h2">Buscar
-						por foto</a>
+				<div class="col-md-6">
+					<div class="input-group h2">
+						<input name="chave" class="form-control" id="search" type="text"
+							placeholder="Pesquisar Filmes (deixe vazio para trazer todos)">
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="submit" name="acao"
+								value="listar">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</span>
+					</div>
 				</div>
 
-				<div class="col-md-3">	
-					<a href="novo_cliente" class="btn btn-primary pull-right h2">Novo
-						Cliente</a>
+				<div class="col-md-3">
+					<a href="novo_filme" class="btn btn-primary pull-right h2">Novo
+						Filme</a>
 				</div>
 			</div>
 			<!-- /#top -->
@@ -70,7 +77,7 @@
 			<div id="list" class="row">
 
 				<div class="table-responsive col-md-12">
-					<table class="table table-striped" cellspacing="0">
+					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th>ID</th>
@@ -85,16 +92,12 @@
 								<th>Número</th>
 								<th>Bairro</th>
 								<th>Cidade</th>
-								<th>Estado</th>
-								<th>País</th>
-								<th>Telefone</th>
-								<th>PersonID</th>
 								
 								<th class="actions">Ações</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="cliente" items="${lista}">
+							<c:forEach var="lista" items="${lista}">
 								<tr>
 									<td>${cliente.id }</td>
 									<td>${cliente.nome }</td>
@@ -107,18 +110,14 @@
 									<td>${cliente.numero }</td>
 									<td>${cliente.bairro }</td>
 									<td>${cliente.cidade }</td>
-									<td>${cliente.estado }</td>
-									<td>${cliente.pais }</td>
-									<td>${cliente.telefone }</td>
-									<td>${cliente.personId }</td>
 									
 									<td class="actions"><a class="btn btn-success btn-xs"
-										href="visualizar_cliente?id=${cliente.id}">Visualizar</a> <a
+										href="visualizar_filme?id=${cliente.id}">Visualizar</a> <a
 										class="btn btn-warning btn-xs"
-										href="alterar_cliente?id=${cliente.id}">Editar</a>
+										href="alterar_filme?id=${cliente.id}">Editar</a>
 										<button id="btn${cliente.id }%>" type="button"
 											class="btn btn-danger btn-xs" data-toggle="modal"
-											data-target="#delete-modal" data-cliente="${cliente.id }">Excluir</button>
+											data-target="#delete-modal" data-filme="${cliente.id }">Excluir</button>
 									</td>
 								</tr>
 							</c:forEach>
@@ -152,7 +151,7 @@
 	<script type="text/javascript">
 		$("#delete-modal").on('show.bs.modal', function(event) {
 			var button = $(event.relatedTarget); //botao que disparou a modal
-			var recipient = button.data('cliente');
+			var recipient = button.data('filme');
 			$("#id_excluir").val(recipient);
 		});
 	</script>

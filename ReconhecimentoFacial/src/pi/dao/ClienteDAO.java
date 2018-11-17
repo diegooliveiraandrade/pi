@@ -15,7 +15,8 @@ import pi.entity.Cliente;
 public class ClienteDAO {
 	@PersistenceContext
 	EntityManager manager;
-
+	
+	
 	public int inserirCliente(Cliente cliente) throws IOException {
 		manager.persist(cliente);
 		return cliente.getId();
@@ -37,17 +38,29 @@ public class ClienteDAO {
 
 	public List<Cliente> listarCliente(String chave) throws IOException {
 
-		String jpql = "select c from Cliente c where c.nome like :chave";
-
+		String jpql = "select c from Cliente c where c.personId like :chave";
 		Query query = manager.createQuery(jpql);
 		query.setParameter("chave", "%" + chave + "%");
 
 		List<Cliente> result = query.getResultList();
+		
 		return result;
 	}
 
 	public List<Cliente> listarClientes() throws IOException {
 		return manager.createQuery("select c from Cliente c").getResultList();
+	}
+
+	public List<Cliente> buscarPerson(String personId) throws IOException {
+		Query query = manager.createQuery("select c FROM Cliente c where c.personId like :chave");
+		query.setParameter("chave", "%" + personId + "%");
+		return query.getResultList();
+	}
+
+	// BUSCA POR PERSONID
+
+	public Cliente buscarClientePersonId(String personId) throws IOException {
+		return manager.find(Cliente.class, personId);
 	}
 
 }

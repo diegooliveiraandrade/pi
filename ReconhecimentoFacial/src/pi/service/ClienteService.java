@@ -32,8 +32,9 @@ public class ClienteService {
 		azureDAO.identifyCliente(azureDAO.detectCliente(urlFoto));
 	}
 
-	public void identifyCliente(File file) {
-		azureDAO.identifyCliente(azureDAO.detectClienteFile(file));
+	public String identifyCliente(File file) throws IOException {
+
+		return azureDAO.identifyCliente(azureDAO.detectClienteFile(file));
 
 	}
 
@@ -54,10 +55,15 @@ public class ClienteService {
 
 	public List<Cliente> listClienteToChave(String chave) throws IOException {
 		return clienteDAO.listarCliente(chave);
+
 	}
 
 	public List<Cliente> listCliente() throws IOException {
 		return clienteDAO.listarClientes();
+	}
+
+	public List<Cliente> buscarPerson(String personId) throws IOException {
+		return clienteDAO.buscarPerson(personId);
 	}
 
 	/*
@@ -82,6 +88,12 @@ public class ClienteService {
 
 	public void insertPhotoClienteFile(Cliente cliente, File photo) throws IOException {
 		azureDAO.insertPhotoClienteFile(cliente.getPersonId(), (cliente.getNome() + " " + cliente.getEstado()), photo);
+	}
+
+	// BUSCAR POR PERSONID
+
+	public Cliente personIdFind(String personId) throws IOException {
+		return clienteDAO.buscarClientePersonId(personId);
 	}
 
 }

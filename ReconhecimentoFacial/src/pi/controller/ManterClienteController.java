@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.codec.binary.Base64;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pi.dao.AzureDAO;
 import pi.entity.Cliente;
 import pi.service.ClienteService;
 
@@ -27,6 +29,15 @@ import pi.service.ClienteService;
 public class ManterClienteController {
 	@Autowired
 	private ClienteService clienteService;
+
+	private AzureDAO azureDAO;
+
+	@RequestMapping("/buscar_cliente")
+	public String listarClientes(HttpSession session) {
+		session.setAttribute("lista", null);
+		return "ListarFilmes";
+
+	}
 
 	@RequestMapping("/")
 	public String iniciar() {
@@ -42,10 +53,35 @@ public class ManterClienteController {
 	public String criarCliente() {
 		return "CriarCliente";
 	}
-	
+
 	@RequestMapping("/identificarCliente")
 	public String buscarCliente() {
 		return "BuscarCliente";
+	}
+
+	@RequestMapping("/buscar_clientes")
+	public String buscarCliente(HttpSession session, String chave) {
+		try {
+
+			List<Cliente> lista;
+			if (chave != null && chave.length() > 0) {
+				lista = clienteService.listClienteToChave(chave);
+			} else {
+				lista = clienteService.listCliente();
+			}
+			session.setAttribute("lista", lista);
+			return "ListarClientes";
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+
+	}
+
+	@RequestMapping("/listar_clientes")
+	public String listarAllClientes(HttpSession session) {
+		session.setAttribute("cliente", null);
+		return "ListarClientes";
 	}
 
 	@Transactional
@@ -65,15 +101,15 @@ public class ManterClienteController {
 				// This will decode the String which is encoded by using Base64 class
 				byte[] imageByte = Base64.decodeBase64(base64Image);
 
-				// save the image to folder
-				String directory = "C:/Users/dietk/Desktop/fotos/" + cliente.getNome() + ".png";
-
-				// conversao file
-				File foto = new File(directory);
+				// salvando arquivo temporariamente
+				File foto = File.createTempFile("fotos", ".png");
 				foto.createNewFile();
 				FileOutputStream fos = new FileOutputStream(foto);
 				fos.write(imageByte);
 				fos.close();
+
+				// APAGANDO ARQUIVO TEMPORARIO
+				foto.deleteOnExit();
 
 				// Enviando imagem para a API
 				clienteService.insertPhotoClienteFile(cliente, foto);
@@ -97,8 +133,8 @@ public class ManterClienteController {
 	}
 
 	@RequestMapping("/catchPhoto")
-	public String catchPhoto(Cliente cliente, @RequestParam(required = false, name = "file") String photo,
-			BindingResult erros, Model model) {
+	public String catchPhoto(HttpSession session, Cliente cliente,
+			@RequestParam(required = false, name = "file") String photo, BindingResult erros, Model model) {
 
 		try {
 
@@ -110,18 +146,32 @@ public class ManterClienteController {
 				// This will decode the String which is encoded by using Base64 class
 				byte[] imageByte = Base64.decodeBase64(base64Image);
 
-				// save the image to folder
-				String directory = "C:/Users/dietk/Desktop/fotos/" + cliente.getNome() + ".png";
-
 				// conversao file
-				File foto = new File(directory);
+				// SALVANDO ARQUIVO TEMPORARIO
+				File foto = File.createTempFile("fotos", ".png");
 				foto.createNewFile();
 				FileOutputStream fos = new FileOutputStream(foto);
 				fos.write(imageByte);
 				fos.close();
-				clienteService.identifyCliente(foto);
-				System.out.println(cliente.getNome());
-				return "VisualizarCliente";
+
+				// APAGANDO ARQUIVO TEMPORARIO
+				foto.deleteOnExit();
+
+				// BUSCA DO CLIENTE ATRAVES DO PERSONID
+
+				String chave = clienteService.identifyCliente(foto);
+
+				List<Cliente> lista;
+				if (chave != null && chave.length() > 0) {
+					lista = clienteService.listClienteToChave(chave);
+				} else {
+					lista = clienteService.listClienteToChave(null);
+				}
+
+				model.addAttribute("lista", lista);
+
+				System.out.println(cliente);
+				return "ListarClientes";
 
 			} else {
 
@@ -137,8 +187,11 @@ public class ManterClienteController {
 	}
 
 	@RequestMapping("/identifica")
-	public String identifica() {
-		return "CatchPhotos";
+	public String identifica(Cliente cliente, Model model) throws IOException {
+		clienteService.personIdFind(cliente.getPersonId());
+		model.addAttribute("cliente", cliente);
+
+		return "VisualizarCliente";
 	}
 
 	/*
@@ -214,35 +267,5 @@ public class ManterClienteController {
 		}
 		return "Cliente removido!";
 	}
-
-	/*
-	 * IDENTIFICA CLIENTE ATRAVES DA FOTO
-	 */
-
-	/*
-	
-	@RequestMapping(method = RequestMethod.POST, value = "rest/cliente/identifica", headers = "Accept=application/json")
-	public @ResponseBody String identifyCliente(@RequestBody String photo, Model model) throws IOException {
-		try {
-
-			AzureDAO azureDAO = new AzureDAO();
-			azureDAO.training();
-
-			// Aqui é acionado o IdentificaPessoa que precisa de um FaceID, obtido através
-			// do DetectaPessoa
-			// IMPORTANTE: ajustar para receber a foto ou array de fotos, o que for
-			// necessario
-			String testeFoto = photo;
-			String response = azureDAO.identifyCliente(azureDAO.detectClienteToUrl(testeFoto));
-
-			return response;
-
-		} catch (Exception e) {
-			throw e;
-		}
-
-	}
-	
-	*/
 
 }
