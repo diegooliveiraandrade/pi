@@ -52,6 +52,20 @@
 				</div>
 
 				<div class="row">
+					<div class="col-md-6 mb-4">
+						<label for="email">Email</label> <input type="text"
+							class="form-control" name="email" id="email" maxlength="60"
+							value="${cliente.email}" readonly>
+					</div>
+
+					<div class="col-md-6 mb-4">
+						<label for="email">Telefone</label> <input type="text"
+							class="form-control" name="telefone" id="telefone" maxlength="20"
+							value="${cliente.telefone}" readonly>
+					</div>
+				</div>
+
+				<div class="row">
 					<div class="col-md-6 mb-3">
 						<div class="input-group">
 							<div class="input-group-prepend">
@@ -70,20 +84,6 @@
 							<input type="text" class="form-control" name="cpf" id="cpf"
 								value="${cliente.cpf}" maxlength="12" readonly>
 						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-6 mb-3">
-						<label for="email">Email</label> <input type="text"
-							class="form-control" name="email" id="email" maxlength="60"
-							value="${cliente.email}" readonly>
-					</div>
-
-					<div class="col-md-6 mb-3">
-						<label for="email">Telefone</label> <input type="text"
-							class="form-control" name="telefone" id="telefone" maxlength="20"
-							value="${cliente.telefone}" readonly>
 					</div>
 				</div>
 
@@ -127,9 +127,9 @@
 							id="cidade" maxlength="100" readonly>
 					</div>
 					<div class="col-md-4 mb-3">
-						<label for="country">UF</label> <input type="text" value="N/A"
-							class="form-control" name="estado" id="estado" maxlength="2"
-							readonly>
+						<label for="country">Estado</label> <input type="text"
+							value="${cliente.estado}" class="form-control" name="estado"
+							id="estado" maxlength="2" readonly>
 					</div>
 					<div class="col-md-4 mb-3">
 						<label for="country">País</label> <input type="text"

@@ -188,7 +188,7 @@
 								required>
 						</div>
 						<div class="col-md-4 mb-3">
-							<label for="country">UF</label> <input type="text"
+							<label for="country">Estado</label> <input type="text"
 								class="form-control" name="estado" id="estado" maxlength="2"
 								required>
 						</div>

@@ -158,7 +158,6 @@ public class ManterClienteController {
 				foto.deleteOnExit();
 
 				// BUSCA DO CLIENTE ATRAVES DO PERSONID
-
 				String chave = clienteService.identifyCliente(foto);
 
 				List<Cliente> lista;

@@ -33,7 +33,7 @@
 					href="https://brazilsouth.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236">API
 						Azure</a></li>
 				<li class="nav-item py-md-2 p-2"><a
-					href="https://www.github.com" target="_blank"><button
+					href="https://github.com/diegooliveiraandrade/pi" target="_blank"><button
 							type="button" class="btn btn-outline-warning py-md-2 p-2">GitHub</button></a></li>
 			</ul>
 		</div>
