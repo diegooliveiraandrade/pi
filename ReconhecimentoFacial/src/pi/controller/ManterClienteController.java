@@ -199,10 +199,35 @@ public class ManterClienteController {
 	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "rest/cliente", headers = "Accept=application/json")
-	public @ResponseBody Cliente insertCliente(@RequestBody Cliente cliente, Model model) throws IOException {
+	public @ResponseBody Cliente insertCliente(@RequestBody Cliente cliente, Model model, BindingResult erros) throws IOException {
 
 		cliente = clienteService.inserirCliente(cliente);
+		
+		// Prepare string
+		String foto = cliente.getFoto();
+		String base64Image = foto.split(",")[1];
+		System.out.println("Teste" + foto);
 
+		// This will decode the String which is encoded by using Base64 class
+		byte[] imageByte = Base64.decodeBase64(base64Image);
+
+		// salvando arquivo temporariamente
+		File foto1 = File.createTempFile("fotos", ".png");
+		foto1.createNewFile();
+		FileOutputStream fos = new FileOutputStream(foto1);
+		fos.write(imageByte);
+		fos.close();
+
+		// APAGANDO ARQUIVO TEMPORARIO
+		foto1.deleteOnExit();
+
+		// Enviando imagem para a API
+		clienteService.insertPhotoClienteFile(cliente, foto1);
+
+		// Trainning API
+		clienteService.training();
+
+		// atualizando o model
 		model.addAttribute("cliente", cliente);
 
 		return cliente;

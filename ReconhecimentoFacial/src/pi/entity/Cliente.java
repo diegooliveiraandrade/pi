@@ -34,18 +34,18 @@ public class Cliente extends Azure {
 	private String telefone;
 	private String personId;
 	@Transient
-	private File foto;
+	private String foto;
 
 	// Contructor
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public File getFoto() {
+	public String getFoto() {
 		return foto;
 	}
 
-	public void setFoto(File foto) {
+	public void setFoto(String foto) {
 		this.foto = foto;
 	}
 
