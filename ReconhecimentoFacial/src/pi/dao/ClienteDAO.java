@@ -15,8 +15,7 @@ import pi.entity.Cliente;
 public class ClienteDAO {
 	@PersistenceContext
 	EntityManager manager;
-	
-	
+
 	public int inserirCliente(Cliente cliente) throws IOException {
 		manager.persist(cliente);
 		return cliente.getId();
@@ -43,7 +42,7 @@ public class ClienteDAO {
 		query.setParameter("chave", "%" + chave + "%");
 
 		List<Cliente> result = query.getResultList();
-		
+
 		return result;
 	}
 

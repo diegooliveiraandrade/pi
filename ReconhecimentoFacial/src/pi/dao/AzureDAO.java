@@ -15,17 +15,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import pi.entity.Cliente;
 import pi.service.ClienteService;
 
 public class AzureDAO {
 
+	@Autowired
 	private ClienteService clienteService;
-	private Cliente cliente;
 
 	// key da API
 	private static final String subscriptionKey = "ecf414eaa0434da2b46426317f6b999d";

@@ -1,7 +1,5 @@
 package pi.entity;
 
-import java.io.File;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente extends Azure {
+public class Cliente {
 
 	@Id
 	@NotNull
